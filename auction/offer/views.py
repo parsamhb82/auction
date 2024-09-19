@@ -9,6 +9,9 @@ from rest_framework import status
 import datetime
 from django.utils.timezone import now
 from .permissions import IsProvider, IsCustomer
+import requests
+from datetime import date
+import json
 
 class CreateAuction(CreateAPIView):
     permission_classes = [IsAuthenticated, IsProvider]
@@ -42,6 +45,15 @@ class CreateOffer(CreateAPIView):
     queryset = Offer.objects.all()
 
     def post(self, request, *args, **kwargs):
+
+        today = date.today()
+        today_list = today.split('-')
+        url = f"https://holidayapi.ir/gregorian/{today_list[0]}/{today_list[1]}/{today_list[2]}"
+        response = requests.get(url)
+        json_file = json.loads(response.content)
+        is_holiday = json_file['is_holiday']
+        if is_holiday:
+            return Response({'message': 'today is a holiday'}, status=status.HTTP_400_BAD_REQUEST)
         customer = self.request.customer
         time = now()
         product = Product.objects.get(id=request.data['product'])

@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import CreateAPIView, ListAPIView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+import requests
 
 class Login(TokenObtainPairView):
     pass
