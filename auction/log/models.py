@@ -1,6 +1,6 @@
 from django.db import models
-from offer import Offer
-from user import User
+from offer.models import Offer
+from user.models import User
 
 class Log(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

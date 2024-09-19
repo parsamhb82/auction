@@ -14,7 +14,7 @@ class Product(models.Model):
     start_price = models.FloatField()
     current_price = models.FloatField(default=0)
 
-class Offer(models.Mode):
+class Offer(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)  
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.FloatField()
