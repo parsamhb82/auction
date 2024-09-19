@@ -8,8 +8,10 @@ from rest_framework.response import Response
 from rest_framework import status
 import datetime
 from django.utils.timezone import now
+from .permissions import IsProvider, IsCustomer
 
 class CreateAuction(CreateAPIView):
+    permission_classes = [IsAuthenticated, IsProvider]
     serializer_class = AuctionCreatSerializer
     queryset = Auction.objects.all()
 
@@ -21,6 +23,7 @@ class CreateAuction(CreateAPIView):
         serializer.save(provider=provider)
 
 class CreateProduct(CreateAPIView):
+    permission_classes = [IsAuthenticated, IsProvider]
     serializer_class = ProductCreatSerilizer
     queryset = Product.objects.all()
 
@@ -34,6 +37,7 @@ class CreateProduct(CreateAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save(auction=auction)
 class CreateOffer(CreateAPIView):
+    permission_classes = [IsAuthenticated, IsCustomer]
     serializer_class = OfferCreatSerilizer
     queryset = Offer.objects.all()
 
@@ -61,6 +65,7 @@ class CreateOffer(CreateAPIView):
             serializer.save(customer=customer, product=product)
 
 class AuctionDestroyView(APIView):
+    permission_classes = [IsAuthenticated, IsProvider]
     def delete(self, request, pk, *args, **kwargs):
         try:
             # Get the auction instance
@@ -75,6 +80,7 @@ class AuctionDestroyView(APIView):
         return Response({"message": "Auction and related products (if no offers) deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
 class FinishedProductsView(ListAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = ProductCreatSerilizer
     queryset = Product.objects.all()
 
@@ -82,6 +88,7 @@ class FinishedProductsView(ListAPIView):
         return Product.objects.filter(end_time__lt=now())
     
 class UnfinishedProductsView(ListAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = ProductCreatSerilizer
     queryset = Product.objects.all()
 
