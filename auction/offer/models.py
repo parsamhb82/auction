@@ -3,6 +3,7 @@ from user.models import Provider,  Customer
 
 class Auction(models.Model):
     provider = models.ForeignKey(Provider, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
@@ -11,7 +12,7 @@ class Product(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     start_price = models.FloatField()
-    current_price = models.FloatField(blank=True, null=True)
+    current_price = models.FloatField(default=0)
 
 class Offer(models.Mode):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)  
